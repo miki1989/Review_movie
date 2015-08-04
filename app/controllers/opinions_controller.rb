@@ -1,16 +1,8 @@
 class OpinionsController < ApplicationController
   before_action :set_opinion, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
-  # GET /opinions
-  # GET /opinions.json
-  def index
-    @opinions = Opinion.all
-  end
-
-  # GET /opinions/1
-  # GET /opinions/1.json
-  def show
-  end
+  before_action :set_movie
+  
 
   # GET /opinions/new
   def new
@@ -26,9 +18,11 @@ class OpinionsController < ApplicationController
   def create
     @opinion = Opinion.new(opinion_params)
     @opinion.user_id = current_user.id
+    @opinion.movie_id = @movie.id
+
     respond_to do |format|
       if @opinion.save
-        format.html { redirect_to @opinion, notice: 'Opinion was successfully created.' }
+        format.html { redirect_to @movie, notice: 'Opinion was successfully created.' }
         format.json { render :show, status: :created, location: @opinion }
       else
         format.html { render :new }
@@ -65,6 +59,10 @@ class OpinionsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_opinion
       @opinion = Opinion.find(params[:id])
+    end
+
+    def set_movie
+      @movie = Movie.find(params[:movie_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

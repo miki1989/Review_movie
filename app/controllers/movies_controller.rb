@@ -11,6 +11,12 @@ class MoviesController < ApplicationController
   # GET /movies/1.json
   def show
     @opinions = Opinion.where(movie_id: @movie.id).order("created_at DESC")
+
+    if @opinion.blank?
+      @avg_opinion = 0
+    else
+      @avg_opinion = @opinions.average(:rating).round(2)
+    end
   end
 
   # GET /movies/new
